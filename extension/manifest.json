@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Calendar Quick Add",
+  "version": "1.0",
+  "description": "Add events to Google Calendar from selected text",
+  "permissions": [
+    "contextMenus",
+    "notifications"
+  ],
+  "host_permissions": [
+    "http://localhost:5001/*",
+    "https://calendar.google.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+  }
+} 
