@@ -70,7 +70,6 @@ def extract_event_details(text):
     - For specific day patterns like "every Monday" or "every Monday and Wednesday", extract this as a custom recurrence
     - If the recurrence has an end date or a count (e.g., "for 10 weeks" or "until December 31"), capture that information
     - For phrases like "every other week" or "biweekly", set recurrence to "custom" and specify the interval in recurrence_details
-
     """
     
     try:

@@ -28,8 +28,8 @@
   "commands": {
     "open-command-bar": {
       "suggested_key": {
-        "default": "Ctrl+E",
-        "mac": "Command+E"
+        "default": "Ctrl+G",
+        "mac": "Command+G"
       },
       "description": "Open Quick Calendar command bar"
     }
