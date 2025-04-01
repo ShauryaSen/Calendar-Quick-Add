@@ -66,7 +66,7 @@ function createOverlay() {
     const input = document.createElement('input');
     input.className = 'input';
     input.type = 'text';
-    input.placeholder = 'Enter event details...';
+    input.placeholder = 'Meeting every Monday at 2pm...';
 
     container.appendChild(input);
     overlay.appendChild(container);

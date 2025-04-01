@@ -61,6 +61,16 @@ def extract_event_details(text):
     - If a user says an event is "to" a time, that means the event ends at that time
     - If a user says an event is "between" two times, that means the event starts at the first time and ends at the second time. that includes if they put a "-" between the two times (ie 1-2) means starts at 1, and ends at 2
     - Do not write arbitrary times unless they are specified, ex: 1 is 1:00 or 13:00 depending on context, 1:05 is 1:05
+    
+    Recurrence Handling Rules:
+    - "every day" or "daily" means the event recurs daily
+    - "every week" or "weekly" means the event recurs weekly on the same day
+    - "every month" or "monthly" means the event recurs monthly on the same date
+    - "every year" or "yearly" or "annually" means the event recurs yearly on the same date
+    - For specific day patterns like "every Monday" or "every Monday and Wednesday", extract this as a custom recurrence
+    - If the recurrence has an end date or a count (e.g., "for 10 weeks" or "until December 31"), capture that information
+    - For phrases like "every other week" or "biweekly", set recurrence to "custom" and specify the interval in recurrence_details
+
     """
     
     try:
