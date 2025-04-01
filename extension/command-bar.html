@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        #command-container {
+            width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+        }
+
+        #command-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        #command-input::placeholder {
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div id="command-container">
+        <input type="text" 
+               id="command-input" 
+               placeholder="Enter event details..."
+               autofocus>
+    </div>
+    <script src="command-bar.js"></script>
+</body>
+</html> 

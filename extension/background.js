@@ -1,10 +1,13 @@
+// Add this at the top of your background.js
+console.log('Background script loaded');
+
 // context menu item
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.contextMenus.create({
+  chrome.contextMenus.create({
         id: "CalendarQuickAdd",
-        title: "Add to Google Calendar",
-        contexts: ["selection"]
-    });
+    title: "Add to Google Calendar",
+    contexts: ["selection"]
+  });
 });
 
 function generateCalendarUrl(details) {
@@ -73,10 +76,72 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
             // Show error to user
             chrome.notifications.create({
                 type: 'basic',
-                iconUrl: 'icon.png',
+                // iconUrl: 'icon.png',
                 title: 'Quick Calendar Error',
                 message: error.message || 'Failed to create calendar event'
             });
         }
     }
+});
+
+// keyboard shorcut
+chrome.commands.onCommand.addListener((command) => {
+    if (command === "open-command-bar") {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            const tab = tabs[0];
+
+            // Skip internal Chrome pages or restricted URLs
+            if (tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://')) {
+                console.warn("Cannot inject into this page:", tab.url);
+                chrome.notifications.create({
+                    type: 'basic',
+                    iconUrl: 'icon.png',
+                    title: 'Quick Calendar Error',
+                    message: 'Command bar cannot be used on this page.'
+                });
+                return;
+            }
+
+            // Inject content script and show overlay
+            chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                files: ['content.js']
+            }, () => {
+                if (chrome.runtime.lastError) {
+                    console.error("Script injection error:", chrome.runtime.lastError);
+                } else {
+                    chrome.tabs.sendMessage(tab.id, { action: 'showOverlay' }, (response) => {
+                        if (chrome.runtime.lastError) {
+                            console.error('Error sending message:', chrome.runtime.lastError);
+    } else {
+                            console.log('Response from content script:', response);
+                        }
+                    });
+                }
+            });
+        });
+    }
+});
+
+// Handle event creation from content script
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'createEvent') {
+        // Use existing fetch logic to create event
+        fetch('http://localhost:5001/extract', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ text: request.text })
+        })
+            .then(response => response.json())
+            .then(eventDetails => {
+                const calendarUrl = generateCalendarUrl(eventDetails);
+                chrome.tabs.create({ url: calendarUrl });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+  }
 }); 
